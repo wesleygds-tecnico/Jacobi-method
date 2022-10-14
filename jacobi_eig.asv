@@ -1,0 +1,75 @@
+function [autoval,autovec ] = jacobi_eig(A,erromax)
+n = length(A);
+V = eye(n);
+if (A==A')
+   maior = 0.;
+   for j = 2:n
+     for i = 1:j-1
+       if (abs(A(i,j))>maior)
+         maior = abs(A(i,j));
+         p = i;
+         q = j;
+       end
+     end
+   end
+   for it = 1:10000
+       a = input('Continuar? \n')
+       if (a == 1)
+       else return
+       end
+       fprintf('phi \n')
+       phi = (A(q,q)-A(p,p))/(2.*A(p,q))
+       disp(phi)
+       fprintf('Sinal \n')
+       sinal = phi/abs(phi);
+       disp(sinal)
+       if (phi == 0)
+         t = 1.;
+         else
+         t = 1./(phi+sinal*sqrt(phi*phi+1));
+       end
+       fprintf('t \n')
+       disp(t)
+       fprintf('cos(phi) \n')
+       c = 1/(sqrt(1+t*t));
+       disp(c)
+       fprintf('sin(phi) \n')
+       s = t/(sqrt(1+t*t)); % s = t/c;
+       disp(s)
+       fprintf('U')
+       U = eye(n);
+       U(p,p) = c;
+       U(q,q) = c;
+       U(p,q) = s;
+       U(q,p) = -s;
+       disp(U)
+       V = V*U;
+       fprintf('')
+       A = U'*A*U; % rotação de jacobi
+       disp(A)
+       maior = 0.;
+       for j = 2:n
+         for i = 1:j-1
+           if (abs(A(i,j))>maior)
+             maior = abs(A(i,j));
+             p = i;
+             q = j;
+           end
+         end
+       end
+       if (maior<erromax)
+           it
+           autoval = diag(A);
+           autovec = V;
+           return
+       end
+   end
+   autoval = diag(A);
+   
+   autovec = V;
+else
+    disp('Não é simétrica\n')
+    return
+end
+fprintf(
+end
